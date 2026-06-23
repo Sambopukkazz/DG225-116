@@ -20,14 +20,14 @@ function Show-Header {
 function Find-Projects {
     # Scan for .csproj files recursively, excluding build/temp and tool directories
     $projects = Get-ChildItem -Path "$PSScriptRoot" -Filter "*.csproj" -Recurse | 
-                Where-Object { $_.FullName -notmatch '\\(bin|obj|packages|\.git|\.vscode|\.agents)\\'}
+    Where-Object { $_.FullName -notmatch '\\(bin|obj|packages|\.git|\.vscode|\.agents)\\' }
     return $projects
 }
 
 function Get-MgcbFiles ($projectDir) {
     # Scan for .mgcb files inside the project directory
     $mgcbFiles = Get-ChildItem -Path $projectDir -Filter "*.mgcb" -Recurse | 
-                 Where-Object { $_.FullName -notmatch '\\(bin|obj)\\'}
+    Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' }
     return $mgcbFiles
 }
 
@@ -49,10 +49,12 @@ function Create-NewProject {
             $targetDir = Join-Path "$PSScriptRoot\src" $projectName
             if (Test-Path $targetDir) {
                 Write-Host "[!] Folder '$projectName' already exists in src/! Please choose a different name." -ForegroundColor Red
-            } else {
+            }
+            else {
                 $validName = $true
             }
-        } else {
+        }
+        else {
             Write-Host "[!] Invalid name! Must start with a letter and contain no spaces or special characters." -ForegroundColor Red
         }
     }
@@ -113,17 +115,18 @@ function Create-NewProject {
                 $exists = $launchJson.configurations | Where-Object { $_.name -eq $configName }
                 if (-not $exists) {
                     $newConfig = [PSCustomObject]@{
-                        name = $configName
-                        type = "dotnet"
-                        request = "launch"
-                        projectPath = '${workspaceFolder}/src/' + $projectName + '/' + $projectName + '.csproj'
+                        name          = $configName
+                        type          = "dotnet"
+                        request       = "launch"
+                        projectPath   = '${workspaceFolder}/src/' + $projectName + '/' + $projectName + '.csproj'
                         preLaunchTask = "build-$projectName"
                     }
                     $launchJson.configurations += $newConfig
                     $launchJson | ConvertTo-Json -Depth 10 | Out-File $launchPath -Encoding utf8
                     Write-Host "[*] Added launch configuration in .vscode/launch.json!" -ForegroundColor DarkGray
                 }
-            } catch {}
+            }
+            catch {}
         }
         
         if (Test-Path $tasksPath) {
@@ -133,10 +136,10 @@ function Create-NewProject {
                 $exists = $tasksJson.tasks | Where-Object { $_.label -eq $taskLabel }
                 if (-not $exists) {
                     $newTask = [PSCustomObject]@{
-                        label = $taskLabel
-                        command = "dotnet"
-                        type = "process"
-                        args = @(
+                        label          = $taskLabel
+                        command        = "dotnet"
+                        type           = "process"
+                        args           = @(
                             "build",
                             ('${workspaceFolder}/src/' + $projectName + '/' + $projectName + '.csproj'),
                             "/property:GenerateFullPaths=true",
@@ -148,7 +151,8 @@ function Create-NewProject {
                     $tasksJson | ConvertTo-Json -Depth 10 | Out-File $tasksPath -Encoding utf8
                     Write-Host "[*] Added build task in .vscode/tasks.json!" -ForegroundColor DarkGray
                 }
-            } catch {}
+            }
+            catch {}
         }
         
         Write-Host ""
@@ -161,7 +165,8 @@ function Create-NewProject {
                 return $newProjFile
             }
         }
-    } else {
+    }
+    else {
         Write-Host "[!] Failed to create project using dotnet CLI templates." -ForegroundColor Red
         Read-Host "Press Enter to return to main menu..."
     }
@@ -225,7 +230,8 @@ function Manage-Project ($selectedProject) {
                 if ($mgcbFiles.Count -eq 0) {
                     Write-Host "[!] No .mgcb file found! Opening blank MGCB Editor..." -ForegroundColor DarkYellow
                     dotnet mgcb-editor
-                } else {
+                }
+                else {
                     $mgcbFile = $mgcbFiles[0].FullName
                     $mgcbRelPath = Resolve-Path $mgcbFile -Relative
                     Write-Host "[OK] Found Content Pipeline: $mgcbRelPath" -ForegroundColor Green
@@ -297,9 +303,11 @@ while (-not $global:ScriptExit) {
             if ($newProj) {
                 Manage-Project $newProj
             }
-        } elseif ($noProjChoice -eq "2") {
+        }
+        elseif ($noProjChoice -eq "2") {
             continue
-        } elseif ($noProjChoice -eq "3") {
+        }
+        elseif ($noProjChoice -eq "3") {
             $global:ScriptExit = $true
         }
         continue
@@ -339,9 +347,11 @@ while (-not $global:ScriptExit) {
         if ($newProj) {
             Manage-Project $newProj
         }
-    } elseif ($selectedProjectIndex -eq ($exitOptionNum - 1)) {
+    }
+    elseif ($selectedProjectIndex -eq ($exitOptionNum - 1)) {
         $global:ScriptExit = $true
-    } else {
+    }
+    else {
         $selectedProject = $projectList[$selectedProjectIndex]
         Manage-Project $selectedProject
     }
