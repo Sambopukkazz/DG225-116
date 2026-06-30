@@ -31,3 +31,4 @@ C:\Users\Admin\OneDrive\Documents\GameProduct\DG225-116\src\MyFirstGame\obj\Debu
 C:\Users\Admin\OneDrive\Documents\GameProduct\DG225-116\src\MyFirstGame\obj\Debug\net9.0\MyFirstGame.pdb
 C:\Users\Admin\OneDrive\Documents\GameProduct\DG225-116\src\MyFirstGame\obj\Debug\net9.0\MyFirstGame.genruntimeconfig.cache
 C:\Users\Admin\OneDrive\Documents\GameProduct\DG225-116\src\MyFirstGame\obj\Debug\net9.0\ref\MyFirstGame.dll
+C:\Users\Admin\OneDrive\Documents\GameProduct\DG225-116\src\MyFirstGame\obj\Debug\net9.0\MyFirstGame.sourcelink.json
